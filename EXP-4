@@ -1,0 +1,132 @@
+AIM:
+Write a C++ program to store first year percentage of students in array.
+Write function for sorting array of floating point numbers 
+in ascending order using
+a) Selection Sort
+b) Bubble sort and 
+c) display top five scores.
+
+INPUT: Read Roll numbers of students
+OUTPUT:
+a) sort student using Bubble Sort
+b) sort student using Selection sort
+c) Display top five scores
+
+#include <iostream>
+using namespace std;
+
+class Sorting {
+private:
+    int marks[100];
+    int n;
+
+public:
+    // Read student marks
+    void readMarks() {
+        cout << "Enter number of students: ";
+        cin >> n;
+
+        for (int i = 0; i < n; i++) {
+            cout << "Enter marks of student " << i + 1 << ": ";
+            cin >> marks[i];
+        }
+    }
+
+    // Display marks
+    void display() {
+        cout << "Student marks are:\n";
+        for (int i = 0; i < n; i++) {
+            cout << marks[i] << " ";
+        }
+        cout << endl;
+    }
+
+    // Bubble Sort (Descending Order)
+    void bubbleSort() {
+        int temp;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (marks[j] < marks[j + 1]) {
+                    temp = marks[j];
+                    marks[j] = marks[j + 1];
+                    marks[j + 1] = temp;
+                }
+            }
+        }
+        cout << "Marks sorted using Bubble Sort\n";
+    }
+
+    // Selection Sort (Descending Order)
+    void selectionSort() {
+        int maxIndex, temp;
+        for (int i = 0; i < n - 1; i++) {
+            maxIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (marks[j] > marks[maxIndex]) {
+                    maxIndex = j;
+                }
+            }
+            temp = marks[i];
+            marks[i] = marks[maxIndex];
+            marks[maxIndex] = temp;
+        }
+        cout << "Marks sorted using Selection Sort\n";
+    }
+
+    // Display Top 5 Scores
+    void topFive() {
+        if (n == 0) {
+            cout << "No student data available\n";
+            return;
+        }
+
+        int limit = (n < 5) ? n : 5;
+        cout << "Top " << limit << " scores are:\n";
+        for (int i = 0; i < limit; i++) {
+            cout << marks[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Sorting s;
+    int choice;
+
+    do {
+        cout << "\n---- Sorting Operations ----\n";
+        cout << "1. Read Marks\n";
+        cout << "2. Display Marks\n";
+        cout << "3. Bubble Sort\n";
+        cout << "4. Selection Sort\n";
+        cout << "5. Display Top 5 Scores\n";
+        cout << "6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            s.readMarks();
+            break;
+        case 2:
+            s.display();
+            break;
+        case 3:
+            s.bubbleSort();
+            break;
+        case 4:
+            s.selectionSort();
+            break;
+        case 5:
+            s.topFive();
+            break;
+        case 6:
+            cout << "Thank you!\n";
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
