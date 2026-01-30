@@ -1,0 +1,146 @@
+AIM: Write a C++ program 
+to store roll numbers of student in array who attended training 
+program in random order. 
+Write function for searching 
+whether particular student attended training program or not, 
+using Linear search and binary search. 
+Compare these two algorithms with respect to the number of 
+comparisons required to find the given students
+
+INPUT: Read Roll numbers of students
+OUTPUT:
+a) find student using Linear Search
+b) find student using binary search
+
+#include <iostream>
+using namespace std;
+
+class Searching {
+private:
+    int roll[100];      // array to store roll numbers
+    int n;              // number of students
+
+public:
+    // Function to read roll numbers
+    void readRollNos() {
+        cout << "Enter number of students: ";
+        cin >> n;
+
+        for (int i = 0; i < n; i++) {
+            cout << "Enter roll number " << i + 1 << ": ";
+            cin >> roll[i];
+        }
+    }
+
+    // Function to display roll numbers
+    void display() {
+        cout << "Student Roll Numbers are:\n";
+        for (int i = 0; i < n; i++) {
+            cout << roll[i] << " ";
+        }
+        cout << endl;
+    }
+
+    // Linear Search
+    void linearSearch(int key) {
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            count++;
+            if (roll[i] == key) {
+                cout << "Student found at position "
+                     << i + 1 << " with "
+                     << count << " comparisons\n";
+                return;
+            }
+        }
+        cout << "Student NOT found with "
+             << count << " comparisons\n";
+    }
+
+    // Selection Sort
+    void selectionSort() {
+        int temp;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (roll[i] > roll[j]) {
+                    temp = roll[i];
+                    roll[i] = roll[j];
+                    roll[j] = temp;
+                }
+            }
+        }
+    }
+
+    // Binary Search
+    void binarySearch(int key) {
+        int low = 0, high = n - 1, mid, count = 0;
+
+        while (low <= high) {
+            count++;
+            mid = (low + high) / 2;
+
+            if (roll[mid] == key) {
+                cout << "Student found at position "
+                     << mid + 1 << " with "
+                     << count << " comparisons\n";
+                return;
+            }
+            else if (roll[mid] < key) {
+                low = mid + 1;
+            }
+            else {
+                high = mid - 1;
+            }
+        }
+        cout << "Student NOT found with "
+             << count << " comparisons\n";
+    }
+};
+
+int main() {
+    Searching s;
+    int choice, key;
+
+    do {
+        cout << "\n---- Search Operations ----\n";
+        cout << "1. Read Roll Numbers\n";
+        cout << "2. Display Roll Numbers\n";
+        cout << "3. Linear Search\n";
+        cout << "4. Binary Search\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            s.readRollNos();
+            break;
+
+        case 2:
+            s.display();
+            break;
+
+        case 3:
+            cout << "Enter roll number to search: ";
+            cin >> key;
+            s.linearSearch(key);
+            break;
+
+        case 4:
+            cout << "Enter roll number to search: ";
+            cin >> key;
+            s.selectionSort();   // sort first
+            s.binarySearch(key);
+            break;
+
+        case 5:
+            cout << "Thank you!\n";
+            break;
+
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
