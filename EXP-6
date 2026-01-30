@@ -1,0 +1,153 @@
+AIM:
+Pizza parlor accepting maximum M=15 orders.
+Orders are served in first come first served basis. 
+Order once placed cannot be cancelled.
+Write C++ program to simulate the system using 
+circular queue using array.
+
+INPUT: Customer Order ID, Pizaa Quantity
+OUTPUT: List of Customer Orders arrannged as circular queue
+
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+
+// Structure for Order
+struct Order {
+    int orderId;
+    int quantity;
+};
+
+// Circular Queue Class
+class CircularQueue {
+private:
+    Order q[MAX];
+    int front, rear;
+
+public:
+    CircularQueue() {
+        front = rear = -1;
+    }
+
+    bool isEmpty() {
+        return (front == -1);
+    }
+
+    bool isFull() {
+        return ((rear + 1) % MAX == front);
+    }
+
+    void enqueue(int id, int qty) {
+        if (isFull()) {
+            cout << "Queue is Full\n";
+            return;
+        }
+
+        if (isEmpty()) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % MAX;
+        }
+
+        q[rear].orderId = id;
+        q[rear].quantity = qty;
+        cout << "Order Accepted\n";
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is Empty\n";
+            return;
+        }
+
+        cout << "Order Served: " << q[front].orderId << endl;
+
+        if (front == rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % MAX;
+        }
+    }
+
+    void display() {
+        if (isEmpty()) {
+            cout << "No pending orders\n";
+            return;
+        }
+
+        int i = front;
+        cout << "Pending Orders:\n";
+        while (true) {
+            cout << "[Order ID: " << q[i].orderId
+                 << ", Quantity: " << q[i].quantity << "]\n";
+            if (i == rear)
+                break;
+            i = (i + 1) % MAX;
+        }
+    }
+};
+
+// Pizza Parlor Class
+class PizzaParlor {
+private:
+    CircularQueue cq;
+    int orderCount;
+
+public:
+    PizzaParlor() {
+        orderCount = 0;
+    }
+
+    void takeOrder(int qty) {
+        cq.enqueue(++orderCount, qty);
+    }
+
+    void serveOrder() {
+        cq.dequeue();
+    }
+
+    void showStatus() {
+        cq.display();
+    }
+};
+
+int main() {
+    PizzaParlor p;
+    int choice, qty;
+
+    do {
+        cout << "\n--- Pizza Parlor Menu ---\n";
+        cout << "1. Take Order\n";
+        cout << "2. Serve Order\n";
+        cout << "3. Order Status\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter pizza quantity: ";
+            cin >> qty;
+            p.takeOrder(qty);
+            break;
+
+        case 2:
+            p.serveOrder();
+            break;
+
+        case 3:
+            p.showStatus();
+            break;
+
+        case 4:
+            cout << "Thank you!\n";
+            break;
+
+        default:
+            cout << "Invalid choice\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
