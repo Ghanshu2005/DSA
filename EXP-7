@@ -1,0 +1,215 @@
+AIM:
+Department of Computer Engineering has student's club named 'Pinnacle Club'. 
+Students of second, third and final year of department 
+can be   membership on request.
+Similarly, onemay cancel the membership of club.
+First node is reserved for president of club and last node is 
+reserved for secretary of club.
+Write C++ program to maintain club member ‘information using 
+singly linked list. Store student PRN and Name.
+Write functions to:
+a) Add and delete the members as well as president 
+or even secretary.
+b) Compute total number of members of club
+c) Display members
+d) Two linked lists exist for two divisions. Concatenate two lists.
+
+
+INPUT: Student PRN name and member Type
+OUTPUT:Two Linked List for SY-Div-A & SY-Div-B
+
+#include <iostream>
+using namespace std;
+
+// Student node
+struct Student {
+    int prn;
+    string name;
+    string role;   // president, secretary, member
+    Student* next;
+};
+
+class PinnacleClub {
+private:
+    Student* headA;   // SY Div A
+    Student* headB;   // SY Div B
+    Student* headAll; // Merged list
+
+public:
+    PinnacleClub() {
+        headA = headB = headAll = NULL;
+    }
+
+    // Create new node
+    Student* createNode(int prn, string name, string role) {
+        Student* temp = new Student;
+        temp->prn = prn;
+        temp->name = name;
+        temp->role = role;
+        temp->next = NULL;
+        return temp;
+    }
+
+    // Add student at end
+    void addStudent(Student*& head, int prn, string name, string role) {
+        Student* temp = createNode(prn, name, role);
+
+        if (head == NULL) {
+            head = temp;
+            return;
+        }
+
+        Student* cur = head;
+        while (cur->next != NULL)
+            cur = cur->next;
+
+        cur->next = temp;
+    }
+
+    // Delete student by PRN
+    void deleteStudent(Student*& head, int prn) {
+        if (head == NULL) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        Student* cur = head;
+        Student* prev = NULL;
+
+        while (cur != NULL && cur->prn != prn) {
+            prev = cur;
+            cur = cur->next;
+        }
+
+        if (cur == NULL) {
+            cout << "Student not found\n";
+            return;
+        }
+
+        if (prev == NULL)
+            head = cur->next;
+        else
+            prev->next = cur->next;
+
+        delete cur;
+        cout << "Student deleted\n";
+    }
+
+    // Display list
+    void display(Student* head) {
+        if (head == NULL) {
+            cout << "List empty\n";
+            return;
+        }
+
+        while (head != NULL) {
+            cout << "[" << head->prn << " | "
+                 << head->name << " | "
+                 << head->role << "] -> ";
+            head = head->next;
+        }
+        cout << "NULL\n";
+    }
+
+    // Count members
+    int count(Student* head) {
+        int cnt = 0;
+        while (head != NULL) {
+            cnt++;
+            head = head->next;
+        }
+        return cnt;
+    }
+
+    // Merge both lists
+    void mergeLists() {
+        if (headA == NULL)
+            headAll = headB;
+        else {
+            headAll = headA;
+            Student* cur = headA;
+            while (cur->next != NULL)
+                cur = cur->next;
+            cur->next = headB;
+        }
+        headA = headB = NULL;
+    }
+
+    // Wrapper functions
+    void addA(int p, string n, string r) { addStudent(headA, p, n, r); }
+    void addB(int p, string n, string r) { addStudent(headB, p, n, r); }
+    void delA(int p) { deleteStudent(headA, p); }
+    void delB(int p) { deleteStudent(headB, p); }
+    void showA() { display(headA); }
+    void showB() { display(headB); }
+    void showAll() { display(headAll); }
+    int countA() { return count(headA); }
+    int countB() { return count(headB); }
+};
+
+int main() {
+    PinnacleClub p;
+    int choice, prn, div;
+    string name, role;
+
+    do {
+        cout << "\n--- Pinnacle Club Menu ---\n";
+        cout << "1. Add Student\n";
+        cout << "2. Display Lists\n";
+        cout << "3. Delete Student\n";
+        cout << "4. Count Members\n";
+        cout << "5. Merge Lists\n";
+        cout << "6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter PRN: ";
+            cin >> prn;
+            cout << "Enter Name: ";
+            cin >> name;
+            cout << "Enter Role (president/secretary/member): ";
+            cin >> role;
+            cout << "Division (1-A, 2-B): ";
+            cin >> div;
+
+            if (div == 1) p.addA(prn, name, role);
+            else p.addB(prn, name, role);
+            break;
+
+        case 2:
+            cout << "SY Div A:\n";
+            p.showA();
+            cout << "SY Div B:\n";
+            p.showB();
+            break;
+
+        case 3:
+            cout << "Enter PRN to delete: ";
+            cin >> prn;
+            cout << "Division (1-A, 2-B): ";
+            cin >> div;
+
+            if (div == 1) p.delA(prn);
+            else p.delB(prn);
+            break;
+
+        case 4:
+            cout << "Members in Div A: " << p.countA() << endl;
+            cout << "Members in Div B: " << p.countB() << endl;
+            break;
+
+        case 5:
+            p.mergeLists();
+            cout << "Merged List:\n";
+            p.showAll();
+            break;
+
+        case 6:
+            cout << "Thank you!\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
