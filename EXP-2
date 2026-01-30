@@ -1,0 +1,184 @@
+AIM: Write a C++ program to compute following operations on String: 
+a) To display word with the longest length 
+b) To determines the frequency of occurrence 
+of particular character in the string 
+c) To check whether given string is palindrome or not 
+d) To display index of first 
+appearance of the substring 
+e) To count the occurrences of each word in a given string
+
+INPUT: Any string
+OUTPUT:
+a) Display longest length string
+b) Find occurrence of particular character in the string 
+c) To check string palindrome or not 
+d) To display first index of substring 
+e) To occurrences of each word in a given string
+
+#include<iostream>
+#include<limits>
+using namespace std;
+
+class StringUtility {
+    char str[100];
+
+public:
+    void inputString() {
+        cout << "\nEnter a string: ";
+        cin.getline(str, 100);
+    }
+
+    void displayString() {
+        cout << "\nString is: " << str;
+    }
+
+    void longestWordLength() {
+        int i = 0, len = 0, maxLen = 0;
+
+        while (str[i] != '\0') {
+            if (str[i] != ' ')
+                len++;
+            else {
+                if (len > maxLen)
+                    maxLen = len;
+                len = 0;
+            }
+            i++;
+        }
+
+        if (len > maxLen)
+            maxLen = len;
+
+        cout << "\nLongest word length: " << maxLen;
+    }
+
+    void charFrequency(char c) {
+        int i = 0, count = 0;
+        while (str[i] != '\0') {
+            if (str[i] == c)
+                count++;
+            i++;
+        }
+        cout << "\nCharacter '" << c << "' occurs " << count << " times";
+    }
+
+    int getLength() {
+        int i = 0;
+        while (str[i] != '\0')
+            i++;
+        return i;
+    }
+
+    void checkPalindrome() {
+        int start = 0;
+        int end = getLength() - 1;
+
+        while (start < end) {
+            if (str[start] != str[end]) {
+                cout << "\nString is NOT Palindrome";
+                return;
+            }
+            start++;
+            end--;
+        }
+        cout << "\nString is Palindrome";
+    }
+
+    void findSubstring(char sub[]) {
+        int i = 0, j = 0, index = -1;
+
+        while (str[i] != '\0') {
+            j = 0;
+            int temp = i;
+
+            while (sub[j] != '\0' && str[temp] == sub[j]) {
+                temp++;
+                j++;
+            }
+
+            if (sub[j] == '\0') {
+                index = i;
+                break;
+            }
+            i++;
+        }
+
+        if (index != -1)
+            cout << "\nSubstring found at index: " << index;
+        else
+            cout << "\nSubstring not found";
+    }
+
+    void wordCount(char word[]) {
+        int i = 0, j = 0, count = 0;
+
+        while (str[i] != '\0') {
+            j = 0;
+            while (word[j] != '\0' && str[i] == word[j]) {
+                i++;
+                j++;
+            }
+
+            if (word[j] == '\0' && (str[i] == ' ' || str[i] == '\0'))
+                count++;
+
+            while (str[i] != ' ' && str[i] != '\0')
+                i++;
+            if (str[i] == ' ')
+                i++;
+        }
+
+        cout << "\nWord occurs " << count << " times";
+    }
+};
+
+int main() {
+    StringUtility obj;
+    int choice;
+    char ch, sub[100];
+
+    do {
+        cout << "\n\n--- STRING MENU ---";
+        cout << "\n1. Enter String";
+        cout << "\n2. Display String";
+        cout << "\n3. Longest Word Length";
+        cout << "\n4. Character Frequency";
+        cout << "\n5. Palindrome Check";
+        cout << "\n6. Find Substring";
+        cout << "\n7. Count Word Occurrence";
+        cout << "\n8. Exit";
+        cout << "\nEnter choice: ";
+
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch (choice) {
+            case 1: obj.inputString(); break;
+            case 2: obj.displayString(); break;
+            case 3: obj.longestWordLength(); break;
+            case 4:
+                cout << "Enter character: ";
+                cin >> ch;
+                obj.charFrequency(ch);
+                break;
+            case 5: obj.checkPalindrome(); break;
+            case 6:
+                cout << "Enter substring: ";
+                cin.getline(sub, 100);
+                obj.findSubstring(sub);
+                break;
+            case 7:
+                cout << "Enter word: ";
+                cin >> sub;
+                obj.wordCount(sub);
+                break;
+            case 8:
+                cout << "Exiting program...";
+                break;
+            default:
+                cout << "Invalid choice!";
+        }
+    } while (choice != 8);
+
+    return 0;
+}
