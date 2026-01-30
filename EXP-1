@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+
+class Addition {
+    int number, total;
+    char ch;
+
+public:
+    Addition() {
+        total = 0;
+        ch = 'y';
+    }
+
+    void calculateSum() {
+        while (ch == 'y' || ch == 'Y') {
+            cout << "Enter number: ";
+            cin >> number;
+
+            total += number;
+
+            cout << "Do you want to continue (y/n): ";
+            cin >> ch;
+        }
+        cout << "Final Sum = " << total;
+    }
+};
+
+int main() {
+    Addition a;
+    a.calculateSum();
+    return 0;
+}
